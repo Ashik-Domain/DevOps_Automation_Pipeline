@@ -101,6 +101,69 @@ This README provides a step-by-step guide to set up Jenkins, Docker, and Trivy o
    yum install -y trivy
    ```
 
+## Jobs
+
+### Job 1: Pull Dockerfile and Build the Image
+
+#### Create a New Jenkins Job:
+1. Go to the Jenkins Dashboard.
+2. Click **New Item**, enter a name (e.g., `Build_Docker_Image`), and select **Freestyle project**.
+
+#### Configure the Job:
+- **Source Code Management**:
+  - Select **Git** and add the repository URL:
+    ```
+    https://github.com/Ashik-Domain/Bookinfo_app.git
+    ```
+  - Use the branch `main`.
+- **Build Steps**:
+  - Add the following shell command in the Build section:
+    ```bash
+    cd src/productpage
+    docker build -t productpage-app .
+    ```
+- **Post-Build Actions**:
+  - Add **Build other projects** and specify the next job (e.g., `Test_Docker_Image`).
+
+#### Save the Job.
+
+### Job 2: Test the Docker Image with Trivy
+
+#### Create a New Jenkins Job:
+1. Name it `Test_Docker_Image`.
+
+#### Configure the Job:
+- **Add a Build Step**:
+  ```bash
+  trivy image --severity HIGH,CRITICAL productpage-app
+  ```
+- **Post-Build Actions**:
+  - Add **Build other projects** and specify the next job (e.g., `Push_to_DockerHub`).
+
+#### Save the Job.
+
+### Job 3: Push the Image to DockerHub
+
+#### Create a New Jenkins Job:
+1. Name it `Push_to_DockerHub`.
+
+#### Configure the Job:
+- **Build Steps**:
+  - Add the following shell command:
+    ```bash
+    docker tag productpage-app <your_dockerhub_username>/productpage-app:latest
+    docker push <your_dockerhub_username>/productpage-app:latest
+    ```
+    Replace `<your_dockerhub_username>` and `<your_dockerhub_password>` with your DockerHub credentials. Alternatively, use the Jenkins credentials ID to inject them dynamically.
+
+#### Save the Job.
+
+### Connecting the Jobs
+
+#### Set Upstream and Downstream Triggers:
+1. Go to Job 1 (`Build_Docker_Image`) and configure its Post-Build Action to trigger Job 2.
+2. Similarly, go to Job 2 (`Test_Docker_Image`) and configure its Post-Build Action to trigger Job 3.
+
 ## Additional Commands
 - Check free memory:
   ```bash
@@ -124,9 +187,6 @@ yum update -y
 yum install -y docker
 systemctl start docker
 yum install java-17-amazon-corretto -y
-
-# install git
-yum install git
 
 # Configure Jenkins
 wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat-stable/jenkins.repo
@@ -154,3 +214,4 @@ enabled=1
 gpgkey=https://aquasecurity.github.io/trivy-repo/rpm/public.key
 EOF
 yum install -y trivy
+```
