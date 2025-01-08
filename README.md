@@ -1,4 +1,4 @@
-# Setup Guide for Jenkins, Docker, and Trivy
+# Project Guide for Jenkins, Docker, and Trivy
 
 This README provides a step-by-step guide to set up Jenkins, Docker, and Trivy on a Linux system. Follow the commands and instructions carefully.
 
@@ -177,6 +177,16 @@ This README provides a step-by-step guide to set up Jenkins, Docker, and Trivy o
 ## Notes
 - Ensure that you have sufficient privileges when running these commands. Use `sudo` when necessary.
 - Refer to the official [Trivy documentation](https://trivy.dev/latest/getting-started/installation/) for more details on installation.
+
+## Next Steps
+
+After completing the Jenkins pipeline, you can use ArgoCD to deploy the Docker image to a Kubernetes cluster and manage the application's lifecycle. For more details, refer to the [DevOps ArgoCD Project](https://github.com/Ashik-Domain/Devops_project_Argocd/blob/main/README.md).
+
+## Bookinfo Repository
+
+- **For the developer app**:  
+  [Bookinfo GitHub Repository](https://github.com/Ashik-Domain/Bookinfo_app.git)
+
 
 ## History of Commands
 The following commands were executed during the setup process:
