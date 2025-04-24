@@ -1,3 +1,10 @@
+# DevOps Automation Pipeline
+- Designed and implemented a complete end-to-end CI/CD automation pipeline using modern DevOps tools including Jenkins, Docker, Trivy, ArgoCD, and Kubernetes on AWS EKS, following GitOps best practices.
+- Configured Jenkins to automate code integration, Docker image creation, vulnerability scanning with Trivy, and push to Docker Hub. Final stage of the pipeline triggers the CD workflow by syncing with the deployment repository.
+- Leveraged ArgoCD to monitor and deploy the latest container images to AWS EKS, ensuring continuous delivery and environment consistency via GitOps. (Repo: [DevOps ArgoCD Project](https://github.com/Ashik-Domain/Devops_project_Argocd/blob/main/README.md) )
+- Outcome: Successfully streamlined the DevOps workflow, enabling faster, secure, and scalable deployments for cloud-native applications. This setup reduces manual intervention, improves security posture, and ensures consistent, version-controlled deployments across environments.
+
+
 # Project Guide for Jenkins, Docker, and Trivy
 
 This README provides a step-by-step guide to set up Jenkins, Docker, and Trivy on a Linux system. Follow the commands and instructions carefully.
