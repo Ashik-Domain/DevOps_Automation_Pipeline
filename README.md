@@ -232,3 +232,4 @@ gpgkey=https://aquasecurity.github.io/trivy-repo/rpm/public.key
 EOF
 yum install -y trivy
 ```
+#end of the file
