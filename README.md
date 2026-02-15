@@ -1,3 +1,4 @@
+
 # DevOps Automation Pipeline
 
 **End-to-end CI/CD pipeline with automated security scanning and GitOps-based deployment**
@@ -66,7 +67,7 @@ Jenkins CI Pipeline (AWS EC2)
 - ✅ **Automated Builds**: Triggers on GitHub code commits
 - ✅ **Security First**: Trivy scans for HIGH and CRITICAL vulnerabilities before deployment
 - ✅ **GitOps Workflow**: Separate CI and CD repositories following best practices
-- ✅ **Zero Manual Intervention**: Fully automated pipeline from code commit to production
+- ✅ **Minimal manual intervention**: Pipeline executes automatically from code commit through deployment.
 - ✅ **Container Registry Integration**: Automatic push to Docker Hub after successful scan
 
 ## 🚀 Pipeline Workflow
