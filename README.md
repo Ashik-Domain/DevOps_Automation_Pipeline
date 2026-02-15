@@ -1,11 +1,10 @@
-
 # DevOps Automation Pipeline
 
-**End-to-end CI/CD pipeline with automated security scanning and GitOps-based deployment**
+**CI pipeline with automated security scanning producing deployable container artifacts**
 
 ## 🎯 Overview
 
-Automated CI/CD pipeline that builds Docker images from application source code, scans for vulnerabilities, and deploys to AWS EKS using GitOps principles. Built to demonstrate modern DevOps practices with Jenkins, Docker, Trivy, and ArgoCD.
+Automated CI pipeline that builds Docker images from application source code, scans for vulnerabilities using Trivy, and pushes verified images to Docker Hub. Demonstrates modern DevOps practices with Jenkins, Docker, and security-first automation. The CD workflow is handled separately using ArgoCD in a [companion repository](https://github.com/Ashik-Domain/CD_Pipeline).
 
 ## 🏗️ Architecture
 
@@ -17,10 +16,12 @@ Jenkins CI Pipeline (AWS EC2)
     ├─→ Job 2: Trivy Security Scan (HIGH/CRITICAL)
     └─→ Job 3: Push to Docker Hub
            ↓
-    ArgoCD (monitors registry)
+    Docker Hub (Container Registry)
            ↓
-    AWS EKS (deploys updated image)
+    [Consumed by CD Pipeline]
 ```
+
+**Note**: The CD workflow is managed separately using ArgoCD in the [CD Pipeline repository](https://github.com/Ashik-Domain/CD_Pipeline), which deploys applications to AWS EKS following GitOps principles.
 
 ## 📸 Pipeline in Action
 
@@ -29,11 +30,9 @@ Jenkins CI Pipeline (AWS EC2)
 *Three chained Jenkins jobs forming the complete CI pipeline*
 
 ### Pipeline Execution
-![Pipeline View](pictures/pipeline-view.png)
-*Automated pipeline execution from code commit to registry push*
-
 ![Build Pipeline](pictures/pipeline.png)
 *Detailed view of pipeline stages and execution status*
+*Automated pipeline execution from code commit to registry push*
 
 ### Individual Jobs
 
@@ -66,8 +65,8 @@ Jenkins CI Pipeline (AWS EC2)
 
 - ✅ **Automated Builds**: Triggers on GitHub code commits
 - ✅ **Security First**: Trivy scans for HIGH and CRITICAL vulnerabilities before deployment
-- ✅ **GitOps Workflow**: Separate CI and CD repositories following best practices
-- ✅ **Minimal manual intervention**: Pipeline executes automatically from code commit through deployment.
+- ✅ **Separated CI/CD**: CI pipeline (build/test/push) separated from CD pipeline (deployment)
+- ✅ **Automated CI Workflow**: Three-stage Jenkins pipeline executes automatically
 - ✅ **Container Registry Integration**: Automatic push to Docker Hub after successful scan
 
 ## 🚀 Pipeline Workflow
@@ -82,11 +81,14 @@ Jenkins CI Pipeline (AWS EC2)
 
 ### CD Pipeline (Separate Repository)
 
-6. **Monitor**: ArgoCD watches Docker Hub for new images
-7. **Sync**: Automatically updates Kubernetes manifests
-8. **Deploy**: Rolls out new version to AWS EKS cluster
+The CI pipeline produces deployable container artifacts. The CD workflow is handled separately:
 
-> **Note**: The CD workflow uses ArgoCD in a [separate repository](https://github.com/Ashik-Domain/CD_Pipeline) to maintain GitOps separation of concerns.
+6. **Artifact Storage**: Verified images stored in Docker Hub registry
+7. **GitOps Management**: Kubernetes manifests in Git define desired cluster state
+8. **ArgoCD Reconciliation**: ArgoCD ensures EKS cluster matches manifest definitions
+9. **Image Updates**: When pods are recreated, Kubernetes pulls updated images from Docker Hub
+
+> **Note**: The CD workflow uses ArgoCD in a [separate repository](https://github.com/Ashik-Domain/CD_Pipeline) following GitOps separation of concerns. See the CD repository for details on deployment workflow and Istio service mesh configuration.
 
 ## 📊 Jenkins Job Configuration
 
@@ -105,8 +107,8 @@ The pipeline consists of three chained Jenkins jobs:
 ### Job 3: Push_to_DockerHub
 - Tags image with Docker Hub username
 - Authenticates to Docker Hub
-- Pushes verified image to registry
-- Triggers ArgoCD sync (via GitOps)
+- Pushes verified image to Docker Hub registry
+- Produces deployable container artifact for CD pipeline consumption
 
 ## 🔐 Security
 
@@ -156,4 +158,3 @@ Want to replicate this pipeline? See [SETUP.md](docs/SETUP.md) for detailed inst
 **Deployment Target**: AWS EKS cluster  
 
 ---
-
